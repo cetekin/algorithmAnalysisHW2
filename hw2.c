@@ -89,7 +89,7 @@ void calculate_costs(long int cost[WORDCNT+1],long int spaceCost[WORDCNT+1][WORD
         for (j = 1; j <= WORDCNT; j++) {
                 min_cost = spaceCost[1][j]; // cost[j] = cost[0] + spaceCost[1][j], cost[0] is zero
 
-                for (i = 1; i <= WORDCNT; i++) {
+                for (i = 1; i <= j; i++) {
 
                         if (spaceCost[i][j] != MAXVAL) {
 
@@ -146,8 +146,8 @@ int main(int argc, char *argv[]) {
 
 
         create_space_matrix(space,words);
-        create_spaceCost_matrix(spaceCost,space);
-        calculate_costs(cost,spaceCost,i_values);
+        //create_spaceCost_matrix(spaceCost,space);
+        //calculate_costs(cost,spaceCost,i_values);
         //line_cnt = calculate_line_adr(i_values,lineAdr);
 
 
@@ -156,10 +156,17 @@ int main(int argc, char *argv[]) {
         }*/
 
 
-
-
-       /*
         for (i = 0; i < WORDCNT+1; i++) {
+                for (j = 0; j < WORDCNT+1; j++) {
+                        printf("%ld ",space[i][j] );
+                }
+                printf("\n");
+        }
+
+        printf("\n\n\n");
+
+
+        /*for (i = 0; i < WORDCNT+1; i++) {
                 for (j = 0; j < WORDCNT+1; j++) {
                         printf("%ld ",spaceCost[i][j] );
                 }
