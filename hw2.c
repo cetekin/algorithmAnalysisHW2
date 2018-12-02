@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define WORDCNT 5
-#define M 18
+#define M 12
 #define MAXVAL 2147483647
 
 
@@ -27,7 +27,7 @@ void create_space_matrix(int space[WORDCNT+1][WORDCNT+1],char* words[WORDCNT]) {
 
         for (i = 1; i < WORDCNT+1; i++) {
                 //one word is written to the line
-                space[i][i] = M - (strlen(words[i-1]) + 1);
+                space[i][i] = M - strlen(words[i-1]);
                 for (j = i+1; j < WORDCNT+1; j++) {
                         length_sum = 0;
 
@@ -35,7 +35,7 @@ void create_space_matrix(int space[WORDCNT+1][WORDCNT+1],char* words[WORDCNT]) {
                                 length_sum += strlen(words[k-1]);
                         }
 
-                        space[i][j] = M - (j + i*length_sum);
+                        space[i][j] = M - j + i - length_sum;
                 }
         }
 
