@@ -1,14 +1,24 @@
+//isim-soyisim : Cetin Tekin
+//ogr no : 17011603
+//ONEMLI NOT : Dosya islemleri icin gerekli fonksiyonlar bu kod icerisinde yazilmamistir.
+//Ornek kelime dizisi uzerinden test yapilmistir
+//Ornek input formati sayfada paylasildiginda gerekli kod bu koda eklenerek guncelleme yapilacak ve labda o sekilde teslim edilecektir
+//ONEMLI NOT2 : Max line capacity degerinin maximum degerinin kac olacagi bilinmedigi icin spaceCost ve cost dizileri long olarak tanimlanmistir
+//Tahmin edilen limitin yukarisinda sacma degerler uretilebilir
+//Linux ortamında GNU GCC ile long boyutu 8 byte oldugu icin daha buyuk sayilari destekleyecektir
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
+#include <limits.h>
 
 #define WORDCNT 5
-#define M 12
-#define MAXVAL 2147483647
+#define M 12  //Line capacity
 
 
-//function prototypes
+//Function prototypes
 int take_pow(int s, int k );
 void create_space_matrix(int space[WORDCNT+1][WORDCNT+1],char* words[WORDCNT]);
 void create_spaceCost_matrix(long int spaceCost[WORDCNT+1][WORDCNT+1],int space[WORDCNT+1][WORDCNT+1]);
@@ -49,7 +59,7 @@ void create_spaceCost_matrix(long int spaceCost[WORDCNT+1][WORDCNT+1],int space[
 
         for (i = 1; i < WORDCNT+1; i++) {
                 if (space[i][i] < 0)
-                        spaceCost[i][i] = MAXVAL;
+                        spaceCost[i][i] = LONG_MAX;
 
                 else
                         spaceCost[i][i] = take_pow(space[i][i],3);
@@ -58,7 +68,7 @@ void create_spaceCost_matrix(long int spaceCost[WORDCNT+1][WORDCNT+1],int space[
                 for (j = i+1; j < WORDCNT+1; j++) {
 
                         if(space[i][j] < 0)
-                                spaceCost[i][j] = MAXVAL;
+                                spaceCost[i][j] = LONG_MAX;
 
                         else
                                 spaceCost[i][j] = take_pow(space[i][j],3);
@@ -98,9 +108,9 @@ void calculate_costs(long int cost[WORDCNT+1],long int spaceCost[WORDCNT+1][WORD
                 min_cost = spaceCost[1][j]; // cost[j] = cost[0] + spaceCost[1][j], cost[0] is zero
                 i_values[j] = 1;
 
-                for (i = 1; i <= WORDCNT; i++) {
+                for (i = 1; i <= j; i++) {
 
-                        if (spaceCost[i][j] != MAXVAL) {
+                        if ( spaceCost[i][j] != LONG_MAX ) {
 
                                 temp = cost[i-1] + spaceCost[i][j];
 
@@ -114,9 +124,10 @@ void calculate_costs(long int cost[WORDCNT+1],long int spaceCost[WORDCNT+1][WORD
                 }
                 cost[j] = min_cost;
         }
+
 }
 
-//Calculates each line's beginning word's order in the words array
+//Calculates each line's beginning word's order in the words array by backtracking using i_values array that is formed in the calculate_cost function
 int calculate_line_adr(int i_values[WORDCNT+1],int lineAdr[WORDCNT+1]) {
 
         int j = WORDCNT;
@@ -167,15 +178,14 @@ void print_lines(int lineAdr[WORDCNT+1],int line_cnt,char* words[WORDCNT]) {
 
 int main(int argc, char *argv[]) {
 
-        char* words[WORDCNT] = {"ali","veli","hasan","huseyin","cemal"};
+        char* words[WORDCNT] = {"ali","veli","hasan","cemal","huseyin"};
         int space[WORDCNT+1][WORDCNT+1] = {0};
         long int spaceCost[WORDCNT+1][WORDCNT+1] = {0};
         long int cost[WORDCNT+1];
-        int i_values[WORDCNT+1];  //holds the line beginnings for all combinations of j value
-        int lineAdr[WORDCNT+1];  //holds the line beginnings for used combinations of j value
+        int i_values[WORDCNT+1];  //Holds the line beginnings of lines for all combinations of j value(the ending word)
+        int lineAdr[WORDCNT+1];  //Holds the line beginnings for used combinations of j value
         int i,j;
-        int line_cnt; //holds the total line count after inserted all words with minimum cost
-
+        int line_cnt; //Holds the total line count after inserted all words with minimum cost
 
 
         create_space_matrix(space,words);
@@ -193,7 +203,9 @@ int main(int argc, char *argv[]) {
                 printf("\n");
         }
 
-        printf("\n\n\n");
+        printf("\n");
+        printf("-----------------------------------------------------------------\n");
+        printf("\n");
 
 
 
@@ -206,14 +218,24 @@ int main(int argc, char *argv[]) {
         }
 
 
-        printf("\n\n\n");
+        printf("\n");
+        printf("-----------------------------------------------------------------\n");
+        printf("\n");
 
         printf("cost array: \n\n");
         for (i = 0; i < WORDCNT+1; i++) {
                 printf("%ld ",cost[i] );
         }
 
-        printf("\n\n\n");
+        printf("\n");
+        printf("-----------------------------------------------------------------\n");
+        printf("\n");
+
+        printf("Minimum cost: %ld\n",cost[WORDCNT] );
+
+        printf("\n");
+        printf("-----------------------------------------------------------------\n");
+        printf("\n");
 
         printf("i_values array: \n\n");
         for (i = 0; i < WORDCNT+1; i++) {
@@ -221,20 +243,21 @@ int main(int argc, char *argv[]) {
 
         }
 
-        printf("\n\n\n");
+        printf("\n");
+        printf("-----------------------------------------------------------------\n");
+        printf("\n");
 
         printf("lineAdr array: \n\n");
         for (i = line_cnt-1; i >= 0; i--) {
                 printf("%d ",lineAdr[i] );
         }
 
-        printf("\n\n\n");
+        printf("\n");
+        printf("-----------------------------------------------------------------\n");
+        printf("\n");
 
         printf("Words inserted with min cost format:\n \n");
         print_lines(lineAdr,line_cnt,words);
-
-
-
 
 
 
