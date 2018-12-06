@@ -11,7 +11,7 @@
 #include <string.h>
 #include <limits.h>
 
-#define WORDCNT 300
+#define WORDCNT 300 //Max word count
 #define M 15  //Line capacity
 
 
@@ -133,7 +133,7 @@ int calculate_line_adr(int i_values[WORDCNT+1],int lineAdr[WORDCNT+1],int word_c
         int i = i_values[j]; //holds the beginning of the last line
         int line_cnt = 0;
 
-
+        // Loop continues until the first line is reached
         while ( i != 1 ) {
 
                 lineAdr[line_cnt] = i;
@@ -206,7 +206,7 @@ int tokenize_paragraph (char paragraph[],char* words[WORDCNT]) {
 
         printf("\n");
         printf("-----------------------------------------------------------------\n");
-        printf("\n");        
+        printf("\n");
 
         return i;
 }
